@@ -9,14 +9,13 @@ maintainer: amartin@layer3com.com
 copyright: 2020 Layer 3 Communications
 category: Data
 build-type: Simple
-extra-source-files: CHANGELOG.md
 
 library
   exposed-modules: HaProxy.Syslog
   build-depends:
     , base >=4.13 && <5
     , bytesmith
-    , byteslice
+    , byteslice >=0.2 && <0.3
     , ip
   hs-source-dirs: src
   default-language: Haskell2010
