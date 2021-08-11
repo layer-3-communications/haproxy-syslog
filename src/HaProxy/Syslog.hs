@@ -1,4 +1,5 @@
 {-# language BangPatterns #-}
+{-# language LambdaCase #-}
 {-# language NamedFieldPuns #-}
 
 module HaProxy.Syslog
@@ -92,6 +93,13 @@ parser = do
   Latin.skipTrailedBy () ' ' 
   Latin.skipTrailedBy () ' ' 
   Latin.skipTrailedBy () ' ' 
+  -- Sometimes, haproxy logs have a truncated copy of the user-agent
+  -- header inside of curly braces. We skip this here. 
+  Latin.trySatisfy (== '{') >>= \case
+    True -> do
+      Latin.skipTrailedBy () '}'
+      Latin.char () ' '
+    False -> pure ()
   Latin.char () '"'
   method <- Parser.takeTrailedBy () 0x20 -- space
   path <- Parser.takeTrailedBy () 0x20 -- space
