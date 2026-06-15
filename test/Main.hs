@@ -24,6 +24,11 @@ main = do
     Nothing -> fail "Could not decode message B"
     Just (Message {clientIp}) -> do
       assert "clientIp" (clientIp == IPv4.fromOctets 192 0 2 66)
+  putStrLn "Test C"
+  case decode msgC of
+    Nothing -> fail "Could not decode message C"
+    Just (Message {clientIp}) -> do
+      assert "clientIp" (clientIp == IPv4.fromOctets 192 0 2 199)
   putStrLn "Finished"
 
 assert :: String -> Bool -> IO ()
@@ -43,3 +48,12 @@ msgB = Bytes.fromLatinString
   \ \"GET /humanresources/home/media/widgetkit/wk-styles-37c53bf7.css HTTP/1.1\"\
   \ TLS_AES_128_GCM_SHA256 TLSv1.3 \"Mozilla/5.0 (Windows NT 10.0; Win64; x64)\
   \ AppleWebKit/537.36 (KH\""
+
+msgC :: Bytes
+msgC = Bytes.fromLatinString
+  "192.0.2.199:54646 [15/Jun/2026:14:06:07.821] abc_tls_external~ abc_external/abc-nyc-wp-1\
+  \ 0/0/1/8/9 200 14474 3351 - - ---- 3252/3239/5/0/0 0/0\
+  \ {Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KH} \"GET\
+  \ https://www.example.com/path/to/resource/example.jpg\
+  \ HTTP/2.0\" TLS_AES_128_GCM_SHA256 TLSv1.3 \"Mozilla/5.0 (Windows NT 10.0; Win64;\
+  \ x64) AppleWebKit/537.36 (KH\""

@@ -88,6 +88,9 @@ parser = do
   Latin.char () ' '
   bytesRead <- Latin.decWord64 ()
   Latin.char () ' '
+  Latin.trySatisfy (\c -> c >= '0' && c <= '9') >>= \case
+    True -> Latin.skipTrailedBy () ' ' 
+    False -> pure ()
   Latin.skipTrailedBy () ' ' 
   Latin.skipTrailedBy () ' ' 
   Latin.skipTrailedBy () ' ' 
